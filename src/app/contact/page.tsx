@@ -82,7 +82,8 @@ export default function ContactPage() {
                   <ContactRow
                     icon={MapPin}
                     label="Office"
-                    value="Ahmedabad, Gujarat, India"
+                    value="203, Mahavir Chamber, Ramnagar Chowk, Ram Nagar, Sabarmati, Ahmedabad, Gujarat 380005"
+                    href="https://maps.app.goo.gl/3i4N5cVcwjBwEWvi7"
                   />
                 </ul>
 
@@ -164,7 +165,12 @@ function ContactRow({
   return (
     <li>
       {href ? (
-        <a href={href} className="flex items-start gap-3 hover:text-brand-700">
+        <a
+          href={href}
+          target={href.startsWith("http") ? "_blank" : undefined}
+          rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+          className="flex items-start gap-3 hover:text-brand-700"
+        >
           {inner}
         </a>
       ) : (

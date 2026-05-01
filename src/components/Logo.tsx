@@ -1,15 +1,34 @@
+import Image from "next/image";
 import Link from "next/link";
 
 /**
- * Kepsure Solutions logo — recreated as inline SVG so it scales crisply at any
- * size and theme. Replace with the official PNG at /public/brand/logo.png
- * whenever supplied (and switch to next/image).
+ * Brand logo.
+ *
+ *  variant="dark"  (default) — full-colour PNG on a transparent background.
+ *                  Use on LIGHT backgrounds (header, page heros, admin, etc).
+ *  variant="light" — same artwork wrapped in a white pill so the dark
+ *                  wordmark stays readable on dark backgrounds (footer).
  */
 export function Logo({ variant = "dark" }: { variant?: "dark" | "light" }) {
-  const wordmarkColor = variant === "light" ? "#ffffff" : "#1a3a6b";
-  const subColor = variant === "light" ? "rgba(255,255,255,0.85)" : "#1a3a6b";
-  const swooshColor = "#f39200";
-  const underlineColor = variant === "light" ? "#fd9a1c" : "#1a3a6b";
+  if (variant === "light") {
+    return (
+      <Link
+        href="/"
+        className="inline-flex items-center group"
+        aria-label="Kepsure Solutions Pvt. Ltd."
+      >
+        <span className="inline-flex items-center rounded-xl bg-white px-4 py-3 shadow-sm ring-1 ring-white/30">
+          <Image
+            src="/brand/logo.png"
+            alt="Kepsure Solutions Pvt. Ltd."
+            width={1658}
+            height={620}
+            className="h-10 w-auto md:h-12"
+          />
+        </span>
+      </Link>
+    );
+  }
 
   return (
     <Link
@@ -17,40 +36,14 @@ export function Logo({ variant = "dark" }: { variant?: "dark" | "light" }) {
       className="inline-flex items-center group"
       aria-label="Kepsure Solutions Pvt. Ltd."
     >
-      <svg
-        viewBox="0 0 360 110"
-        className="h-12 w-auto md:h-14 transition group-hover:opacity-95"
-        role="img"
-      >
-        <title>Kepsure Solutions Pvt. Ltd.</title>
-        <path
-          d="M 16 60 C 36 14, 132 -2, 246 26 L 252 38 C 158 14, 64 26, 30 66 Z"
-          fill={swooshColor}
-        />
-        <text
-          x="22"
-          y="78"
-          fontFamily="'Space Grotesk', system-ui, sans-serif"
-          fontWeight="800"
-          fontSize="46"
-          letterSpacing="-1"
-          fill={wordmarkColor}
-        >
-          KEPSURE
-        </text>
-        <rect x="22" y="84" width="266" height="2.5" fill={underlineColor} />
-        <text
-          x="24"
-          y="102"
-          fontFamily="'Space Grotesk', system-ui, sans-serif"
-          fontWeight="700"
-          fontSize="13"
-          letterSpacing="3.5"
-          fill={subColor}
-        >
-          SOLUTIONS PVT. LTD.
-        </text>
-      </svg>
+      <Image
+        src="/brand/logo.png"
+        alt="Kepsure Solutions Pvt. Ltd."
+        width={1658}
+        height={620}
+        priority
+        className="h-11 w-auto md:h-12 transition group-hover:opacity-90"
+      />
     </Link>
   );
 }

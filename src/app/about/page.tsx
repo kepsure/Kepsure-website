@@ -72,7 +72,7 @@ export default function AboutPage() {
                   professional services.
                 </p>
                 <p>
-                  We are headquartered in India and operate as an authorised
+                  We are headquartered in Ahmedabad, Gujarat and operate as an authorised
                   partner / reseller for Cisco, Microsoft, VMware, Barracuda,
                   Sophos, Veeam, Fortinet, HPE, Dell and more. Every one of our
                   15+ engineers carries OEM certification, and we hold internal
@@ -89,7 +89,7 @@ export default function AboutPage() {
                   {[
                     ["Entity", "Kepsure Solutions Pvt. Ltd."],
                     ["Tagline", "A Total IT Solution Provider"],
-                    ["Headquarters", "India"],
+                    ["Headquarters", "Ahmedabad, Gujarat"],
                     ["Engineers", "15+ certified"],
                     ["Industries", "Manufacturing, BFSI, Healthcare, more"],
                     ["Support hours", "10:00 AM – 6:00 PM, Mon–Sat"],

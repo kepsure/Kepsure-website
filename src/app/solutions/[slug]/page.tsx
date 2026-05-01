@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowUpRight, Check } from "lucide-react";
+import { ArrowUpRight, Check, Layers } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { PageHero } from "@/components/PageHero";
+import { SolutionHero } from "@/components/SolutionHero";
 import { CTABanner } from "@/components/CTABanner";
 import { SOLUTIONS, getSolution } from "@/lib/solutions";
 
@@ -40,10 +40,11 @@ export default async function SolutionPage({
     <>
       <Header />
       <main>
-        <PageHero
-          eyebrow={solution.tagline}
-          title={solution.name}
-          description={solution.summary}
+        <SolutionHero
+          slug={solution.slug}
+          name={solution.name}
+          tagline={solution.tagline}
+          summary={solution.summary}
           breadcrumbs={[
             { href: "/", label: "Home" },
             { href: "/solutions", label: "Solutions" },
@@ -54,10 +55,21 @@ export default async function SolutionPage({
         <section className="bg-white py-20">
           <div className="mx-auto grid max-w-7xl gap-12 px-4 md:px-8 lg:grid-cols-12">
             <div className="lg:col-span-8">
-              <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-700 to-brand-900 text-white shadow-lg shadow-brand-700/15">
-                <Icon className="h-8 w-8" strokeWidth={1.7} />
+              {/* Overview narrative */}
+              <span className="text-xs font-bold uppercase tracking-[0.28em] text-accent-600">
+                Overview
+              </span>
+              <h2 className="font-display mt-3 text-3xl text-ink md:text-4xl">
+                Why this matters.
+              </h2>
+              <div className="mt-6 max-w-3xl space-y-4 text-base leading-relaxed text-ink/70 md:text-lg">
+                {solution.overview.map((p) => (
+                  <p key={p.slice(0, 24)}>{p}</p>
+                ))}
               </div>
-              <h2 className="font-display mt-8 text-3xl text-ink md:text-4xl">
+
+              {/* Capabilities */}
+              <h2 className="font-display mt-16 text-3xl text-ink md:text-4xl">
                 What we deliver
               </h2>
               <ul className="mt-6 grid gap-3 sm:grid-cols-2">
@@ -76,6 +88,68 @@ export default async function SolutionPage({
                 ))}
               </ul>
 
+              {/* Tech stack */}
+              <h2 className="font-display mt-16 text-3xl text-ink md:text-4xl">
+                The stack we work with
+              </h2>
+              <p className="mt-3 max-w-2xl text-ink/65">
+                Vendor-neutral by default. We pick from the platforms below
+                based on fit, cost over five years, and how well they run in
+                your environment — not by what we hold inventory on.
+              </p>
+              <div className="mt-7 space-y-5">
+                {solution.stack.map((group) => (
+                  <div key={group.category}>
+                    <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.28em] text-brand-700">
+                      <Layers className="h-3.5 w-3.5" strokeWidth={2.2} />
+                      {group.category}
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {group.items.map((i) => (
+                        <span
+                          key={i}
+                          className="inline-flex rounded-full border border-mist-2 bg-white px-3.5 py-1.5 text-xs font-semibold text-ink/80 shadow-sm transition hover:-translate-y-0.5 hover:border-accent-400 hover:text-brand-800 hover:shadow-md"
+                        >
+                          {i}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Use cases */}
+              <h2 className="font-display mt-16 text-3xl text-ink md:text-4xl">
+                Use cases
+              </h2>
+              <p className="mt-3 max-w-2xl text-ink/65">
+                A few representative engagements — names redacted for client
+                confidentiality, the work is real.
+              </p>
+              <div className="mt-6 grid gap-4 md:grid-cols-3">
+                {solution.useCases.map((u, i) => (
+                  <div
+                    key={u.title}
+                    className="group relative overflow-hidden rounded-2xl border border-mist-2 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-brand-300 hover:shadow-lg"
+                  >
+                    <span
+                      className="pointer-events-none absolute -right-8 -top-8 h-20 w-20 rounded-full bg-accent-100/70 transition-transform duration-500 group-hover:scale-150"
+                      aria-hidden
+                    />
+                    <span className="font-display relative text-[11px] font-bold uppercase tracking-[0.28em] text-brand-300">
+                      Case 0{i + 1}
+                    </span>
+                    <h3 className="font-display relative mt-2 text-lg text-ink">
+                      {u.title}
+                    </h3>
+                    <p className="relative mt-2 text-sm leading-relaxed text-ink/65">
+                      {u.body}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Outcomes */}
               <h2 className="font-display mt-16 text-3xl text-ink md:text-4xl">
                 Outcomes you can measure
               </h2>
@@ -98,6 +172,7 @@ export default async function SolutionPage({
                 ))}
               </div>
 
+              {/* FAQs */}
               <h2 className="font-display mt-16 text-3xl text-ink md:text-4xl">
                 Frequently asked
               </h2>
@@ -178,3 +253,4 @@ export default async function SolutionPage({
     </>
   );
 }
+

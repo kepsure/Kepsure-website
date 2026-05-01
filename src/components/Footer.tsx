@@ -29,13 +29,18 @@ const SOLUTIONS = [
 
 export function Footer() {
   return (
-    <footer className="relative bg-ink text-white">
-      <div className="bg-grid-dark absolute inset-0 opacity-50" aria-hidden />
+    <footer className="relative bg-gradient-to-b from-mist via-white to-mist/60 text-ink">
+      {/* Top accent rule for clean handoff from the dark CTA above */}
+      <div
+        className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-400/60 to-transparent"
+        aria-hidden
+      />
+
       <div className="relative mx-auto max-w-7xl px-4 py-16 md:px-8">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           <div>
-            <Logo variant="light" />
-            <p className="mt-5 text-sm text-white/70 leading-relaxed">
+            <Logo />
+            <p className="mt-5 text-sm leading-relaxed text-ink/70">
               A turnkey IT solutions partner — planning, design, implementation
               and ongoing support for businesses that depend on technology to
               run.
@@ -46,7 +51,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
-                className="grid h-9 w-9 place-items-center rounded-full border border-white/15 text-white/70 transition hover:border-accent-500 hover:text-accent-400"
+                className="grid h-9 w-9 place-items-center rounded-full border border-mist-2 bg-white text-brand-700 transition hover:-translate-y-0.5 hover:border-accent-500 hover:text-accent-600 hover:shadow-md"
               >
                 <FacebookIcon className="h-4 w-4" />
               </a>
@@ -55,7 +60,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
-                className="grid h-9 w-9 place-items-center rounded-full border border-white/15 text-white/70 transition hover:border-accent-500 hover:text-accent-400"
+                className="grid h-9 w-9 place-items-center rounded-full border border-mist-2 bg-white text-brand-700 transition hover:-translate-y-0.5 hover:border-accent-500 hover:text-accent-600 hover:shadow-md"
               >
                 <LinkedinIcon className="h-4 w-4" />
               </a>
@@ -63,13 +68,13 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-display text-sm uppercase tracking-widest text-accent-400">
+            <h4 className="font-display text-xs font-bold uppercase tracking-[0.28em] text-accent-600">
               Solutions
             </h4>
-            <ul className="mt-5 space-y-3 text-sm text-white/75">
+            <ul className="mt-5 space-y-3 text-sm text-ink/70">
               {SOLUTIONS.map((s) => (
                 <li key={s.href}>
-                  <Link href={s.href} className="hover:text-accent-300">
+                  <Link href={s.href} className="transition hover:text-brand-700">
                     {s.label}
                   </Link>
                 </li>
@@ -78,107 +83,124 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-display text-sm uppercase tracking-widest text-accent-400">
+            <h4 className="font-display text-xs font-bold uppercase tracking-[0.28em] text-accent-600">
               Company
             </h4>
-            <ul className="mt-5 space-y-3 text-sm text-white/75">
+            <ul className="mt-5 space-y-3 text-sm text-ink/70">
               <li>
-                <Link href="/about" className="hover:text-accent-300">
+                <Link href="/about" className="transition hover:text-brand-700">
                   About Kepsure
                 </Link>
               </li>
               <li>
-                <Link href="/services" className="hover:text-accent-300">
+                <Link
+                  href="/services"
+                  className="transition hover:text-brand-700"
+                >
                   Services
                 </Link>
               </li>
               <li>
-                <Link href="/products" className="hover:text-accent-300">
+                <Link
+                  href="/products"
+                  className="transition hover:text-brand-700"
+                >
                   Product Zone
                 </Link>
               </li>
               <li>
-                <Link href="/support" className="hover:text-accent-300">
+                <Link
+                  href="/support"
+                  className="transition hover:text-brand-700"
+                >
                   Support
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-accent-300">
+                <Link
+                  href="/contact"
+                  className="transition hover:text-brand-700"
+                >
                   Contact
                 </Link>
               </li>
               <li>
-                <Link href="/admin" className="hover:text-accent-300">
+                <Link href="/admin" className="transition hover:text-brand-700">
                   Admin Login
-                </Link>
-              </li>
-              <li className="pt-2">
-                <Link
-                  href="/privacy"
-                  className="text-white/55 hover:text-accent-300"
-                >
-                  Privacy policy
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/cookies"
-                  className="text-white/55 hover:text-accent-300"
-                >
-                  Cookie policy
                 </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-display text-sm uppercase tracking-widest text-accent-400">
+            <h4 className="font-display text-xs font-bold uppercase tracking-[0.28em] text-accent-600">
               Reach Us
             </h4>
-            <ul className="mt-5 space-y-4 text-sm text-white/75">
+            <ul className="mt-5 space-y-4 text-sm text-ink/70">
               <li className="flex items-start gap-2.5">
                 <Phone
-                  className="mt-0.5 h-4 w-4 shrink-0 text-accent-400"
+                  className="mt-0.5 h-4 w-4 shrink-0 text-accent-500"
                   strokeWidth={1.8}
                 />
                 <a
                   href="tel:+919904408606"
-                  className="hover:text-accent-300"
+                  className="transition hover:text-brand-700"
                 >
                   +91 99044 08606
                 </a>
               </li>
               <li className="flex items-start gap-2.5">
                 <Mail
-                  className="mt-0.5 h-4 w-4 shrink-0 text-accent-400"
+                  className="mt-0.5 h-4 w-4 shrink-0 text-accent-500"
                   strokeWidth={1.8}
                 />
                 <a
                   href="mailto:hradmin@kepsure.com"
-                  className="hover:text-accent-300"
+                  className="transition hover:text-brand-700"
                 >
                   hradmin@kepsure.com
                 </a>
               </li>
               <li className="flex items-start gap-2.5">
                 <Mail
-                  className="mt-0.5 h-4 w-4 shrink-0 text-accent-400"
+                  className="mt-0.5 h-4 w-4 shrink-0 text-accent-500"
                   strokeWidth={1.8}
                 />
                 <a
                   href="mailto:support@kepsuresupport.com"
-                  className="hover:text-accent-300"
+                  className="transition hover:text-brand-700"
                 >
                   support@kepsuresupport.com
                 </a>
               </li>
               <li className="flex items-start gap-2.5">
                 <MapPin
-                  className="mt-0.5 h-4 w-4 shrink-0 text-accent-400"
+                  className="mt-0.5 h-4 w-4 shrink-0 text-accent-500"
+                  strokeWidth={1.8}
+                />
+                <a
+                  href="https://maps.app.goo.gl/3i4N5cVcwjBwEWvi7"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition hover:text-brand-700"
+                >
+                  <span className="block text-[11px] font-semibold uppercase tracking-[0.22em] text-ink/40">
+                    Office
+                  </span>
+                  203, Mahavir Chamber, Ramnagar Chowk,
+                  <br />
+                  Ram Nagar, Sabarmati, Ahmedabad,
+                  <br />
+                  Gujarat 380005
+                </a>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <MapPin
+                  className="mt-0.5 h-4 w-4 shrink-0 text-accent-500"
                   strokeWidth={1.8}
                 />
                 <span>
-                  <span className="block text-[11px] uppercase tracking-widest text-white/40">
+                  <span className="block text-[11px] font-semibold uppercase tracking-[0.22em] text-ink/40">
                     Support hours
                   </span>
                   10:00 AM – 6:00 PM, Mon–Sat
@@ -188,12 +210,32 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-white/50 md:flex-row md:items-center md:justify-between">
+        <div className="mt-12 flex flex-col gap-4 border-t border-mist-2 pt-6 text-xs text-ink/55 md:flex-row md:items-center md:justify-between">
           <p>
             © {new Date().getFullYear()} Kepsure Solutions Pvt. Ltd. All rights
             reserved.
           </p>
-          <p>A Total IT Solution Provider.</p>
+          <div className="flex items-center gap-5 md:gap-6">
+            <Link
+              href="/privacy"
+              className="transition hover:text-brand-700"
+            >
+              Privacy policy
+            </Link>
+            <Link
+              href="/cookies"
+              className="transition hover:text-brand-700"
+            >
+              Cookie policy
+            </Link>
+            <span className="hidden h-3 w-px bg-mist-2 md:inline-block" />
+            <span className="ml-3 hidden font-semibold text-brand-700 md:inline-block md:ml-6">
+              A Total IT Solution Provider.
+            </span>
+          </div>
+          <p className="font-semibold text-brand-700 md:hidden">
+            A Total IT Solution Provider.
+          </p>
         </div>
       </div>
     </footer>
