@@ -75,6 +75,18 @@ body {
 
 ::selection { background: var(--color-brand-700); color: white; }
 
+/* Discourage casual saving of brand imagery — block native drag, the
+   touch-hold callout on iOS, and image text-selection. Right-click is
+   handled in JS via <ImageProtection /> so it can target <img> only. */
+img {
+  -webkit-user-drag: none;
+  user-drag: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 .font-display { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.02em; }
 
 .bg-grid {

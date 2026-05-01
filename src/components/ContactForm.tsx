@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Send, CheckCircle2 } from "lucide-react";
+import { Send, CheckCircle2, ChevronDown } from "lucide-react";
 
 const SUBJECTS = [
   "Cyber security",
@@ -13,14 +13,26 @@ const SUBJECTS = [
   "Other",
 ];
 
+// Reasonably strict but pragmatic email regex — requires user, @, domain
+// with at least one dot, and a 2+ letter TLD. Matches the input pattern.
+const EMAIL_RE = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const EMAIL_PATTERN = "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}";
+
 export function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
+  const [email, setEmail] = useState("");
+  const [emailTouched, setEmailTouched] = useState(false);
+  const emailValid = EMAIL_RE.test(email);
+  const showEmailError = emailTouched && email.length > 0 && !emailValid;
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!emailValid) {
+      setEmailTouched(true);
+      return;
+    }
     const data = new FormData(e.currentTarget);
     const name = String(data.get("name") ?? "");
-    const email = String(data.get("email") ?? "");
     const company = String(data.get("company") ?? "");
     const subject = String(data.get("subject") ?? "");
     const message = String(data.get("message") ?? "");
@@ -66,24 +78,68 @@ export function ContactForm() {
       </p>
 
       <div className="mt-7 grid gap-5 md:grid-cols-2">
-        <Field label="Your name" name="name" required />
-        <Field label="Work email" name="email" type="email" required />
-        <Field label="Company" name="company" />
+        <Field
+          label="Your name"
+          name="name"
+          required
+          placeholder="Your full name"
+        />
+        <div>
+          <Label>Work email</Label>
+          <input
+            name="email"
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            onBlur={() => setEmailTouched(true)}
+            pattern={EMAIL_PATTERN}
+            placeholder="you@company.com"
+            aria-invalid={showEmailError || undefined}
+            aria-describedby={showEmailError ? "email-error" : undefined}
+            className={`mt-2 w-full rounded-xl border bg-mist px-4 py-3 text-sm text-ink outline-none transition placeholder:text-ink/35 focus:bg-white ${
+              showEmailError
+                ? "border-red-300 focus:border-red-500"
+                : "border-mist-2 focus:border-brand-500"
+            }`}
+          />
+          {showEmailError && (
+            <p
+              id="email-error"
+              className="mt-1.5 text-xs font-medium text-red-600"
+            >
+              Please enter a valid email address (e.g. you@company.com).
+            </p>
+          )}
+        </div>
+        <Field
+          label="Company"
+          name="company"
+          placeholder="Company name"
+        />
         <div>
           <Label>Topic</Label>
-          <select
-            name="subject"
-            defaultValue=""
-            required
-            className="mt-2 w-full rounded-xl border border-mist-2 bg-mist px-4 py-3 text-sm text-ink outline-none transition focus:border-brand-500 focus:bg-white"
-          >
-            <option value="" disabled>
-              Choose a topic
-            </option>
-            {SUBJECTS.map((s) => (
-              <option key={s}>{s}</option>
-            ))}
-          </select>
+          <div className="relative mt-2">
+            <select
+              name="subject"
+              defaultValue=""
+              required
+              className="block w-full appearance-none rounded-xl border border-mist-2 bg-mist px-4 py-3 pr-10 text-sm text-ink outline-none transition invalid:text-ink/35 focus:border-brand-500 focus:bg-white"
+            >
+              <option value="" disabled>
+                Select a topic
+              </option>
+              {SUBJECTS.map((s) => (
+                <option key={s} value={s} className="text-ink">
+                  {s}
+                </option>
+              ))}
+            </select>
+            <ChevronDown
+              className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink/45"
+              strokeWidth={2}
+            />
+          </div>
         </div>
       </div>
 
@@ -93,7 +149,7 @@ export function ContactForm() {
           name="message"
           rows={5}
           required
-          placeholder="A few lines on the problem, current setup or timing — we&apos;ll come back with the right person."
+          placeholder="Briefly describe the problem or outcome you need"
           className="mt-2 w-full rounded-xl border border-mist-2 bg-mist px-4 py-3 text-sm text-ink outline-none transition focus:border-brand-500 focus:bg-white"
         />
       </div>
@@ -129,11 +185,13 @@ function Field({
   name,
   type = "text",
   required,
+  placeholder,
 }: {
   label: string;
   name: string;
   type?: string;
   required?: boolean;
+  placeholder?: string;
 }) {
   return (
     <div>
@@ -142,7 +200,8 @@ function Field({
         name={name}
         type={type}
         required={required}
-        className="mt-2 w-full rounded-xl border border-mist-2 bg-mist px-4 py-3 text-sm text-ink outline-none transition focus:border-brand-500 focus:bg-white"
+        placeholder={placeholder}
+        className="mt-2 w-full rounded-xl border border-mist-2 bg-mist px-4 py-3 text-sm text-ink outline-none transition placeholder:text-ink/35 focus:border-brand-500 focus:bg-white"
       />
     </div>
   );

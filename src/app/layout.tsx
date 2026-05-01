@@ -8,6 +8,7 @@ import "@fontsource/space-grotesk/600.css";
 import "@fontsource/space-grotesk/700.css";
 import "./globals.css";
 import { CookieBanner } from "@/components/CookieBanner";
+import { ImageProtection } from "@/components/ImageProtection";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://kepsure-website.vercel.app";
@@ -71,6 +72,7 @@ export default function RootLayout({
       <body>
         {children}
         <CookieBanner />
+        <ImageProtection />
       </body>
     </html>
   );

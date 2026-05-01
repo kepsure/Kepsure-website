@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { PageHero } from "@/components/PageHero";
+import { ProductsHero } from "@/components/ProductsHero";
+import { ProductsFilter } from "@/components/ProductsFilter";
 import { ProductCard } from "@/components/ProductCard";
 import { CTABanner } from "@/components/CTABanner";
 import { listProducts } from "@/lib/products";
@@ -20,79 +21,79 @@ export default async function ProductZonePage({
 }) {
   const sp = await searchParams;
   const category = sp.category;
-  const products = await listProducts({ category });
+
+  // Always pull the full catalogue for stats + counts; filter for the grid.
+  const allProducts = await listProducts();
+  const products = category
+    ? allProducts.filter((p) => p.category === category)
+    : allProducts;
+
+  const counts: Record<string, number> = {};
+  for (const c of PRODUCT_CATEGORIES) counts[c] = 0;
+  for (const p of allProducts) {
+    counts[p.category] = (counts[p.category] ?? 0) + 1;
+  }
+  const totalCount = allProducts.length;
+  const inStockCount = allProducts.filter((p) => p.in_stock).length;
+  const brandCount = new Set(
+    allProducts.map((p) => p.brand).filter(Boolean),
+  ).size;
+  const categoryCount = Object.values(counts).filter((n) => n > 0).length;
 
   return (
     <>
       <Header />
       <main>
-        <PageHero
-          eyebrow="Product Zone"
-          title={
-            category
-              ? `${category} — what we recommend.`
-              : "The gear we trust. Curated by our engineers."
-          }
-          description="A short list of products Kepsure has audited, deployed and supported in production. Don't see what you need? Tell us the problem — we&apos;ll specify it."
+        <ProductsHero
           breadcrumbs={[
             { href: "/", label: "Home" },
             { label: "Product Zone" },
             ...(category ? [{ label: category }] : []),
           ]}
+          totalCount={totalCount}
+          inStockCount={inStockCount}
+          brandCount={brandCount}
+          categoryCount={categoryCount}
         />
 
-        <section className="bg-white pt-10">
-          <div className="mx-auto max-w-7xl px-4 md:px-8">
-            <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:overflow-visible md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden">
-              <Link
-                href="/products"
-                className={`shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold transition ${
-                  !category
-                    ? "bg-brand-700 text-white"
-                    : "border border-mist-2 bg-white text-ink/70 hover:border-brand-300 hover:text-brand-700"
-                }`}
-              >
-                All
-              </Link>
-              {PRODUCT_CATEGORIES.map((c) => (
-                <Link
-                  key={c}
-                  href={`/products?category=${encodeURIComponent(c)}`}
-                  className={`shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold transition ${
-                    category === c
-                      ? "bg-brand-700 text-white"
-                      : "border border-mist-2 bg-white text-ink/70 hover:border-brand-300 hover:text-brand-700"
-                  }`}
-                >
-                  {c}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
+        <ProductsFilter
+          categories={PRODUCT_CATEGORIES}
+          counts={counts}
+          totalCount={totalCount}
+          active={category}
+        />
 
-        <section className="bg-white pb-20 pt-10">
-          <div className="mx-auto max-w-7xl px-4 md:px-8">
-            {products.length === 0 ? (
-              <div className="rounded-3xl border border-dashed border-mist-2 bg-mist p-16 text-center">
-                <h3 className="font-display text-2xl text-ink">
-                  Nothing listed yet
-                </h3>
-                <p className="mt-3 text-ink/65">
-                  Our team will publish the catalogue shortly. In the meantime —
-                  tell us what you need and we&apos;ll specify it.
-                </p>
-                <Link
-                  href="/contact"
-                  className="mt-6 inline-flex rounded-full bg-brand-700 px-6 py-3 text-sm font-semibold text-white transition hover:bg-brand-800"
-                >
-                  Request a custom quote
-                </Link>
+        <section className="relative overflow-hidden bg-white pb-24 pt-12">
+          <div
+            className="pointer-events-none absolute -left-32 top-1/4 h-72 w-72 rounded-full bg-accent-200/30 blur-3xl"
+            style={{ animation: "blob-drift 22s ease-in-out infinite" }}
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute -right-32 bottom-0 h-80 w-80 rounded-full bg-brand-200/30 blur-3xl"
+            style={{ animation: "blob-drift 28s ease-in-out 5s infinite reverse" }}
+            aria-hidden
+          />
+
+          <div className="relative mx-auto max-w-7xl px-4 md:px-8">
+            {category && (
+              <div className="mb-6 flex items-baseline justify-between gap-4">
+                <h2 className="font-display text-2xl text-ink md:text-3xl">
+                  {category}
+                </h2>
+                <span className="text-xs font-semibold uppercase tracking-widest text-ink/55">
+                  {products.length}{" "}
+                  {products.length === 1 ? "product" : "products"}
+                </span>
               </div>
+            )}
+
+            {products.length === 0 ? (
+              <EmptyState category={category} />
             ) : (
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {products.map((p) => (
-                  <ProductCard key={p.id} p={p} />
+                {products.map((p, i) => (
+                  <ProductCard key={p.id} p={p} index={i} />
                 ))}
               </div>
             )}
@@ -103,5 +104,39 @@ export default async function ProductZonePage({
       </main>
       <Footer />
     </>
+  );
+}
+
+function EmptyState({ category }: { category?: string }) {
+  return (
+    <div className="rounded-3xl border border-dashed border-mist-2 bg-mist/60 p-16 text-center">
+      <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-sm">
+        <svg viewBox="0 0 24 24" className="h-6 w-6 text-brand-700" aria-hidden>
+          <path
+            d="M3 7l9-4 9 4-9 4-9-4z M3 7v10l9 4 9-4V7"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </div>
+      <h3 className="font-display mt-5 text-2xl text-ink">
+        {category
+          ? `Nothing in ${category} yet`
+          : "Catalogue coming soon"}
+      </h3>
+      <p className="mx-auto mt-3 max-w-md text-ink/65">
+        We&apos;re still publishing this category. In the meantime — tell us
+        what you need and we&apos;ll specify it.
+      </p>
+      <Link
+        href="/contact"
+        className="mt-6 inline-flex rounded-full bg-brand-700 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-brand-700/15 transition hover:bg-brand-800"
+      >
+        Request a custom quote
+      </Link>
+    </div>
   );
 }

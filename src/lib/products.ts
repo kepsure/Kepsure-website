@@ -142,11 +142,4 @@ export async function getProduct(id: string): Promise<Product | null> {
   return (data as Product) ?? null;
 }
 
-export function formatPrice(p: number | null) {
-  if (p == null) return "On request";
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(p);
-}
+export { formatPrice } from "./format";
