@@ -1,4 +1,4 @@
--- Tanuj Communications — Supabase schema
+-- Kepsure Solutions — Supabase schema
 -- Run this in the Supabase SQL editor of a fresh project.
 
 create extension if not exists "uuid-ossp";
@@ -39,6 +39,14 @@ before update on public.products
 for each row execute function public.set_updated_at();
 
 -- =====================================================================
+-- Table-level GRANTs for Supabase API roles.
+--   Without these, RLS doesn't even get a chance — Postgres rejects with
+--   "permission denied for table products" before policy evaluation.
+-- =====================================================================
+grant select on public.products to anon;
+grant select, insert, update, delete on public.products to authenticated;
+
+-- =====================================================================
 -- Row Level Security
 --   Public site can READ products.
 --   Authenticated admins can WRITE.
@@ -48,13 +56,15 @@ alter table public.products enable row level security;
 drop policy if exists "products read for everyone" on public.products;
 create policy "products read for everyone"
   on public.products for select
+  to anon, authenticated
   using (true);
 
 drop policy if exists "products write for authenticated" on public.products;
 create policy "products write for authenticated"
   on public.products for all
-  using (auth.role() = 'authenticated')
-  with check (auth.role() = 'authenticated');
+  to authenticated
+  using (true)
+  with check (true);
 
 -- =====================================================================
 -- Storage bucket for product photos
